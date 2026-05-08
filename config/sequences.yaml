@@ -1,0 +1,32 @@
+outreach:
+  touches:
+    - day: 0
+      channel: email
+      template: intro
+    - day: 2
+      channel: email
+      template: value_add
+    - day: 5
+      channel: email
+      template: different_angle
+    - day: 10
+      channel: sms
+      template: short_ping
+    - day: 21
+      channel: email
+      template: reengagement
+
+nurture:
+  touches:
+    - day: 0
+      channel: email
+      template: welcome_nurture
+    - day: 14
+      channel: email
+      template: insight
+    - day: 30
+      channel: email
+      template: case_study
+    - day: 60
+      channel: email
+      template: check_in
