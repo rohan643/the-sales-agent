@@ -1,0 +1,179 @@
+{
+  "name": "The Sales Agent \u2014 Main Workflow",
+  "nodes": [
+    {
+      "id": "1",
+      "name": "Airtable Trigger",
+      "type": "n8n-nodes-base.airtableTrigger",
+      "position": [
+        200,
+        300
+      ],
+      "parameters": {
+        "table": "Contacts",
+        "event": "create"
+      }
+    },
+    {
+      "id": "2",
+      "name": "Enrich Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        400,
+        300
+      ],
+      "parameters": {
+        "url": "https://person.clearbit.com/v2/combined/find",
+        "method": "GET"
+      }
+    },
+    {
+      "id": "3",
+      "name": "Score ICP",
+      "type": "n8n-nodes-base.openAi",
+      "position": [
+        600,
+        300
+      ],
+      "parameters": {
+        "model": "gpt-4o",
+        "operation": "message"
+      }
+    },
+    {
+      "id": "4",
+      "name": "Route by Score",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        800,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.score}}",
+              "operation": "gte",
+              "value2": 70
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        1000,
+        200
+      ],
+      "parameters": {
+        "operation": "send"
+      }
+    },
+    {
+      "id": "6",
+      "name": "Send SMS",
+      "type": "n8n-nodes-base.twilio",
+      "position": [
+        1000,
+        400
+      ],
+      "parameters": {
+        "operation": "send"
+      }
+    },
+    {
+      "id": "7",
+      "name": "Update Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "position": [
+        1200,
+        300
+      ],
+      "parameters": {
+        "operation": "update"
+      }
+    }
+  ],
+  "connections": {
+    "Airtable Trigger": {
+      "main": [
+        [
+          {
+            "node": "Enrich Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich Lead": {
+      "main": [
+        [
+          {
+            "node": "Score ICP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score ICP": {
+      "main": [
+        [
+          {
+            "node": "Route by Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Score": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send SMS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "main": [
+        [
+          {
+            "node": "Update Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send SMS": {
+      "main": [
+        [
+          {
+            "node": "Update Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+}
