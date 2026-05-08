@@ -1,0 +1,30 @@
+# Ideal Customer Profile — edit to match your target market
+industries:
+  - SaaS
+  - E-commerce
+  - Professional Services
+  - Home Services
+  - Real Estate
+
+employee_count:
+  min: 5
+  max: 200
+
+location:
+  - United States
+  - Canada
+
+job_titles:
+  - CEO
+  - Founder
+  - Owner
+  - Head of Operations
+  - COO
+
+pain_signals:
+  - "hiring ops manager"
+  - "scaling team"
+  - "manual process"
+  - "spreadsheet"
+
+min_score_for_outreach: 70
